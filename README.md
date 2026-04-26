@@ -312,8 +312,8 @@ Este proyecto está bajo la Licencia MIT - ver el archivo `LICENSE` para más de
 ## 👥 Autor
 
 **Tu Nombre**
-- GitHub: [@tu-usuario](https://github.com/ajmm31)
-- LinkedIn: [Tu Perfil](https://www.linkedin.com/in/alvaro-jose-mu%C3%B1oz-murillo-57187184/)
+- GitHub: [@ajmm31](https://github.com/ajmm31)
+- LinkedIn: [alvaro-jose-munoz-murillo](https://www.linkedin.com/in/alvaro-jose-mu%C3%B1oz-murillo-57187184/)
 
 ## 🙏 Agradecimientos
 
