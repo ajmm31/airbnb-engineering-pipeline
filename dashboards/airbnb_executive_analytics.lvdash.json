@@ -1,0 +1,784 @@
+{
+  "datasets": [
+    {
+      "name": "kpi_avg_price",
+      "displayName": "KPI: Average Price",
+      "queryLines": [
+        "SELECT\n",
+        "  ROUND(AVG(final_price), 2) as avg_price\n",
+        "FROM\n",
+        "  silver_airbnb"
+      ]
+    },
+    {
+      "name": "kpi_total_properties",
+      "displayName": "KPI: Total Properties",
+      "queryLines": [
+        "SELECT\n",
+        "  COUNT(*) as total_properties\n",
+        "FROM\n",
+        "  silver_airbnb"
+      ]
+    },
+    {
+      "name": "kpi_avg_rating",
+      "displayName": "KPI: Average Rating",
+      "queryLines": [
+        "SELECT\n",
+        "  ROUND(AVG(rating), 2) as avg_rating\n",
+        "FROM\n",
+        "  silver_airbnb"
+      ]
+    },
+    {
+      "name": "price_rating_scatter",
+      "displayName": "Price vs Rating Analysis",
+      "queryLines": [
+        "SELECT\n",
+        "  final_price,\n",
+        "  rating,\n",
+        "  property_type,\n",
+        "  property_name\n",
+        "FROM\n",
+        "  silver_airbnb\n",
+        "WHERE\n",
+        "  final_price IS NOT NULL\n",
+        "  AND rating IS NOT NULL"
+      ]
+    },
+    {
+      "name": "price_segments",
+      "displayName": "Price Segments Analysis",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  gold_price_segments\n",
+        "ORDER BY\n",
+        "  total_propiedades DESC"
+      ]
+    },
+    {
+      "name": "top_locations",
+      "displayName": "Top Locations",
+      "queryLines": [
+        "SELECT\n",
+        "  location,\n",
+        "  COUNT(*) as property_count,\n",
+        "  ROUND(AVG(final_price), 2) as avg_price,\n",
+        "  ROUND(MIN(final_price), 2) as min_price,\n",
+        "  ROUND(MAX(final_price), 2) as max_price,\n",
+        "  ROUND(AVG(rating), 2) as avg_rating,\n",
+        "  SUM(review_count) as total_reviews\n",
+        "FROM\n",
+        "  silver_airbnb\n",
+        "WHERE\n",
+        "  location IS NOT NULL\n",
+        "GROUP BY\n",
+        "  location\n",
+        "ORDER BY\n",
+        "  property_count DESC\n",
+        "LIMIT 10"
+      ]
+    },
+    {
+      "name": "top_property_types",
+      "displayName": "Top Property Types",
+      "queryLines": [
+        "SELECT\n",
+        "  property_type,\n",
+        "  COUNT(*) as property_count,\n",
+        "  ROUND(AVG(final_price), 2) as avg_price,\n",
+        "  ROUND(AVG(rating), 2) as avg_rating\n",
+        "FROM\n",
+        "  silver_airbnb\n",
+        "WHERE\n",
+        "  property_type IS NOT NULL\n",
+        "GROUP BY\n",
+        "  property_type\n",
+        "ORDER BY\n",
+        "  property_count DESC\n",
+        "LIMIT 10"
+      ]
+    },
+    {
+      "name": "kpi_total_reviews",
+      "displayName": "KPI: Total Reviews",
+      "queryLines": [
+        "SELECT\n",
+        "  SUM(review_count) as total_reviews\n",
+        "FROM\n",
+        "  silver_airbnb"
+      ]
+    },
+    {
+      "name": "top_properties",
+      "displayName": "Top Rated Properties",
+      "queryLines": [
+        "SELECT\n",
+        "  property_name,\n",
+        "  property_type,\n",
+        "  location,\n",
+        "  final_price,\n",
+        "  rating,\n",
+        "  review_count\n",
+        "FROM\n",
+        "  gold_top_properties\n",
+        "ORDER BY\n",
+        "  rating DESC,\n",
+        "  review_count DESC\n",
+        "LIMIT 15"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "a9dbf6da",
+      "displayName": "Page 1",
+      "layout": [
+        {
+          "widget": {
+            "name": "counter_total_properties",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "kpi_total_properties",
+                  "fields": [
+                    {
+                      "name": "total_properties",
+                      "expression": "`total_properties`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Properties",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "total_properties",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Total Properties"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_avg_price",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "kpi_avg_price",
+                  "fields": [
+                    {
+                      "name": "avg_price",
+                      "expression": "`avg_price`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Average Price",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg_price",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "none"
+                  },
+                  "displayName": "Avg Price"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_avg_rating",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "kpi_avg_rating",
+                  "fields": [
+                    {
+                      "name": "avg_rating",
+                      "expression": "`avg_rating`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Average Rating",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg_rating",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "none"
+                  },
+                  "displayName": "Avg Rating"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_total_reviews",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "kpi_total_reviews",
+                  "fields": [
+                    {
+                      "name": "total_reviews",
+                      "expression": "`total_reviews`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Reviews",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "total_reviews",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Total Reviews"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_property_types",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "top_property_types",
+                  "fields": [
+                    {
+                      "name": "property_type",
+                      "expression": "`property_type`"
+                    },
+                    {
+                      "name": "property_count",
+                      "expression": "`property_count`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Top 10 Property Types by Count",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "property_type",
+                  "displayName": "Property Type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "property_count",
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Property Count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "scatter_price_rating",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "price_rating_scatter",
+                  "fields": [
+                    {
+                      "name": "property_type",
+                      "expression": "`property_type`"
+                    },
+                    {
+                      "name": "final_price",
+                      "expression": "`final_price`"
+                    },
+                    {
+                      "name": "rating",
+                      "expression": "`rating`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Price vs Rating Correlation",
+                "showTitle": true
+              },
+              "widgetType": "scatter",
+              "encodings": {
+                "x": {
+                  "fieldName": "final_price",
+                  "displayName": "Final Price",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "rating",
+                  "displayName": "Rating",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "property_type",
+                  "legend": {
+                    "position": "right"
+                  },
+                  "displayName": "Property Type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "table_top_locations",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "top_locations",
+                  "fields": [
+                    {
+                      "name": "location",
+                      "expression": "`location`"
+                    },
+                    {
+                      "name": "property_count",
+                      "expression": "`property_count`"
+                    },
+                    {
+                      "name": "avg_price",
+                      "expression": "`avg_price`"
+                    },
+                    {
+                      "name": "min_price",
+                      "expression": "`min_price`"
+                    },
+                    {
+                      "name": "max_price",
+                      "expression": "`max_price`"
+                    },
+                    {
+                      "name": "avg_rating",
+                      "expression": "`avg_rating`"
+                    },
+                    {
+                      "name": "total_reviews",
+                      "expression": "`total_reviews`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Top 10 Locations by Property Count",
+                "showTitle": true
+              },
+              "rowsPerPage": 25,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "location",
+                    "displayName": "Location"
+                  },
+                  {
+                    "fieldName": "property_count",
+                    "displayName": "Property Count"
+                  },
+                  {
+                    "fieldName": "avg_price",
+                    "displayName": "Avg Price"
+                  },
+                  {
+                    "fieldName": "min_price",
+                    "displayName": "Min Price"
+                  },
+                  {
+                    "fieldName": "max_price",
+                    "displayName": "Max Price"
+                  },
+                  {
+                    "fieldName": "avg_rating",
+                    "displayName": "Avg Rating"
+                  },
+                  {
+                    "fieldName": "total_reviews",
+                    "displayName": "Total Reviews"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 12,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "pie_price_segments_final",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "price_segments",
+                  "fields": [
+                    {
+                      "name": "total_propiedades",
+                      "expression": "`total_propiedades`"
+                    },
+                    {
+                      "name": "precio_segmento",
+                      "expression": "`precio_segmento`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Price Segment Distribution",
+                "showTitle": true
+              },
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "total_propiedades",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    },
+                    "abbreviation": "compact"
+                  },
+                  "displayName": "Total Properties"
+                },
+                "color": {
+                  "fieldName": "precio_segmento",
+                  "legend": {
+                    "position": "right"
+                  },
+                  "displayName": "Price Segment",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 10,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_segment_metrics_final",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "price_segments",
+                  "fields": [
+                    {
+                      "name": "precio_segmento",
+                      "expression": "`precio_segmento`"
+                    },
+                    {
+                      "name": "precio_promedio",
+                      "expression": "`precio_promedio`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Average Price by Segment",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "precio_segmento",
+                  "displayName": "Price Segment",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "precio_promedio",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    },
+                    "abbreviation": "none"
+                  },
+                  "displayName": "Avg Price",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 10,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "table_top_properties_final",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "top_properties",
+                  "fields": [
+                    {
+                      "name": "property_name",
+                      "expression": "`property_name`"
+                    },
+                    {
+                      "name": "property_type",
+                      "expression": "`property_type`"
+                    },
+                    {
+                      "name": "location",
+                      "expression": "`location`"
+                    },
+                    {
+                      "name": "final_price",
+                      "expression": "`final_price`"
+                    },
+                    {
+                      "name": "rating",
+                      "expression": "`rating`"
+                    },
+                    {
+                      "name": "review_count",
+                      "expression": "`review_count`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Top 15 Highly Rated Properties",
+                "showTitle": true
+              },
+              "rowsPerPage": 25,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "property_name",
+                    "displayName": "Property Name"
+                  },
+                  {
+                    "fieldName": "property_type",
+                    "displayName": "Type"
+                  },
+                  {
+                    "fieldName": "location",
+                    "displayName": "Location"
+                  },
+                  {
+                    "fieldName": "final_price",
+                    "displayName": "Price ($)"
+                  },
+                  {
+                    "fieldName": "rating",
+                    "displayName": "Rating"
+                  },
+                  {
+                    "fieldName": "review_count",
+                    "displayName": "Reviews"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 12,
+            "height": 5
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
